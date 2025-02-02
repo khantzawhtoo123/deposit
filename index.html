@@ -132,8 +132,8 @@
             if (amount && txnNo && telegramUser && telegramId) {
                 let message = `✅ **ငွေပေးချေမှုအသေးစိတ်** ✅\n\n💰 **Amount:** ${amount} MMK\n🔢 **Txn No (Last 5):** ${txnNo}\n👤 **User:** @${telegramUser}\n🆔 **User ID:** ${telegramId}`;
 
-                let telegramBotToken = "YOUR_BOT_TOKEN";
-                let adminChatId = "YOUR_ADMIN_CHAT_ID"; 
+                let telegramBotToken = "7353351146:AAF9RCaaMd70N02ouL9va6ctQI-VGsYm4Oc";
+                let adminChatId = "6640151906"; 
                 
                 let adminUrl = `https://api.telegram.org/bot${telegramBotToken}/sendMessage?chat_id=${adminChatId}&text=${encodeURIComponent(message)}&parse_mode=Markdown`;
                 
