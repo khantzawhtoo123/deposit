@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WavePay & KPay Payment</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            text-align: center; 
+            margin: 0; 
+            padding: 0; 
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4, #ffdde1);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .container { 
+            max-width: 450px; 
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px; 
+            border-radius: 15px; 
+            box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        .payment-box { 
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 15px; 
+            margin: 10px 0; 
+            border-radius: 10px; 
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1);
+        }
+        .qr-code { 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h2 { color: #ff5f6d; font-weight: bold; }
+        h3 { color: #ff758c; }
+        input, button { 
+            width: 100%; 
+            padding: 10px; 
+            margin: 8px 0; 
+            border: none; 
+            border-radius: 5px; 
+            font-size: 16px;
+        }
+        button { 
+            background: linear-gradient(135deg, #ff758c, #ff7eb3); 
+            color: white; 
+            font-weight: bold; 
+            cursor: pointer; 
+        }
+        button:hover { background: linear-gradient(135deg, #ff5f6d, #ff6f91); }
+        #success-section { display: none; }
+    </style>
+</head>
+<body>
+
+    <div class="container" id="payment-section">
+        <h2>WAVEPay & KPay Payment</h2>
+
+        <div class="payment-box">
+            <div class="qr-code">
+                <h3>WAVEPay</h3>
+                <div id="wavepay-qr"></div>
+                <p>💳 <b>09792926205</b></p>
+            </div>
+            <div class="qr-code">
+                <h3>KPay</h3>
+                <div id="kpay-qr"></div>
+                <p>💳 <b>09792926205</b></p>
+            </div>
+        </div>
+
+        <h3>ငွေပေးချေမှုအချက်အလက်</h3>
+        <form id="payment-form">
+            <label>💰 ငွေပမာဏ (MMK):</label>
+            <input type="number" id="amount" required>
+
+            <label>🔢 Transaction No (နောက်ဆုံး 5 လုံး):</label>
+            <input type="text" id="txn_no" maxlength="5" required>
+
+            <label>👤 Telegram Username:</label>
+            <input type="text" id="telegram_user" required>
+
+            <label>🆔 Telegram ID:</label>
+            <input type="text" id="telegram_id" required>
+
+            <button type="submit">💳 ငွေပေးချေမှုအချက်အလက် ပို့ရန်</button>
+        </form>
+    </div>
+
+    <!-- Success Page -->
+    <div class="container" id="success-section">
+        <h2 style="color: green;">🎉 ငွေပေးချေမှု အောင်မြင်ပါသည် 🎉</h2>
+        <p>📩 သင့်ငွေပေးချေမှု အချက်အလက်ကို Admin သို့ ပို့ပြီးပါပြီ။  
+ခေတ္တခနစောင့်ပါ စစ်ဆေးနေပါသည်။
+</p>
+        <a href="index.html">
+            <button style="background: linear-gradient(135deg, #4CAF50, #66bb6a);">🏠 Back to Payment</button>
+        </a>
+    </div>
+
+    <script>
+        // Generate QR Code for WAVEPay
+        new QRCode(document.getElementById("wavepay-qr"), {
+            text: "tel:09792926205",
+            width: 120,
+            height: 120
+        });
+
+        // Generate QR Code for KBZPay
+        new QRCode(document.getElementById("kpay-qr"), {
+            text: "https://www.kbzpay.com/pay/09792926205",
+            width: 120,
+            height: 120
+        });
+
+        document.getElementById("payment-form").addEventListener("submit", function(event) {
+            event.preventDefault();
+            
+            let amount = document.getElementById("amount").value;
+            let txnNo = document.getElementById("txn_no").value;
+            let telegramUser = document.getElementById("telegram_user").value;
+            let telegramId = document.getElementById("telegram_id").value;
+
+            if (amount && txnNo && telegramUser && telegramId) {
+                let message = `✅ **ငွေပေးချေမှုအသေးစိတ်** ✅\n\n💰 **Amount:** ${amount} MMK\n🔢 **Txn No (Last 5):** ${txnNo}\n👤 **User:** @${telegramUser}\n🆔 **User ID:** ${telegramId}`;
+
+                let telegramBotToken = "YOUR_BOT_TOKEN";
+                let adminChatId = "YOUR_ADMIN_CHAT_ID"; 
+                
+                let adminUrl = `https://api.telegram.org/bot${telegramBotToken}/sendMessage?chat_id=${adminChatId}&text=${encodeURIComponent(message)}&parse_mode=Markdown`;
+                
+                let userMessage = "📩 သင့်ငွေပေးချေမှု အချက်အလက်ကို Admin သို့ ပို့ပြီးပါပြီ။\nခေတ္တခနစောင့်ပါ စစ်ဆေးနေပါသည်။";
+                let userUrl = `https://api.telegram.org/bot${telegramBotToken}/sendMessage?chat_id=${telegramId}&text=${encodeURIComponent(userMessage)}&parse_mode=Markdown`;
+
+                fetch(adminUrl)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.ok) {
+                            fetch(userUrl)
+                                .then(response => response.json())
+                                .then(userData => {
+                                    if (userData.ok) {
+                                        document.getElementById("payment-section").style.display = "none";
+                                        document.getElementById("success-section").style.display = "block";
+                                    } else {
+                                        alert("User id wrong❌။ Admin ထံသာ ပို့နိုင်ပါသည်။");
+                                    }
+                                });
+                        } else {
+                            alert("Telegram သို့ ပို့၍မရပါ!");
+                        }
+                    })
+                    .catch(error => alert("Error: " + error));
+            } else {
+                alert("သင့်အချက်အလက်များကို ပြည့်စုံစွာ ဖြည့်ပါ!");
+            }
+        });
+    </script>
+
+</body>
+</html>
